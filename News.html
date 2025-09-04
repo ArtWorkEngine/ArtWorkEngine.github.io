@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Новости</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: transparent;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+      padding: 10px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .news-card {
+      background: rgba(30, 30, 40, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .news-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      background: rgba(40, 40, 50, 0.8);
+    }
+
+    .news-banner {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #2d2d42 0%, #3c3c5c 100%);
+    }
+
+    .news-content {
+      padding: 16px;
+    }
+
+    .news-date {
+      color: rgba(123, 97, 255, 0.9);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .news-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .news-excerpt {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .loader .dot {
+      width: 10px;
+      height: 10px;
+      margin: 0 4px;
+      background: rgba(123, 97, 255, 0.9);
+      border-radius: 50%;
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+
+    .loader .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loader .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .retry-btn {
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: rgba(123, 97, 255, 0.2);
+      border: 1px solid rgba(123, 97, 255, 0.5);
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .retry-btn:hover {
+      background: rgba(123, 97, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="news-grid" id="newsGrid">
+    <!-- News cards will be loaded here -->
+  </div>
+  
+  <div class="loader" id="loader">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <script>
+    const NEWS_IDS_URL = "https://raw.githubusercontent.com/ArtWorkEngine/ArtWorkEngine.github.io/refs/heads/main/News/NewsIDs";
+    const NEWS_DATA_BASE_URL = "https://raw.githubusercontent.com/ArtWorkEngine/ArtWorkEngine.github.io/refs/heads/main/News/News";
+    const NEWS_PAGE_BASE_URL = "https://artworkengine.github.io/NewsPage.html?id=";
+
+    const newsGrid = document.getElementById("newsGrid");
+    const loader = document.getElementById("loader");
+
+    // Format date function
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      
+      try {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('ru-RU', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }).format(date);
+      } catch (e) {
+        return dateString;
+      }
+    }
+
+    // Truncate text function
+    function truncateText(text, maxLength = 120) {
+      if (!text || text.length <= maxLength) return text || "";
+      
+      return text.substring(0, maxLength) + "...";
+    }
+
+    // Load news function
+    async function loadNews() {
+      try {
+        // Fetch news IDs
+        const idsResponse = await fetch(NEWS_IDS_URL);
+        
+        if (!idsResponse.ok) {
+          throw new Error(`Ошибка загрузки: ${idsResponse.status}`);
+        }
+        
+        const newsIds = await idsResponse.json();
+        
+        if (!Array.isArray(newsIds) || newsIds.length === 0) {
+          throw new Error("Новости не найдены");
+        }
+        
+        // Load each news item
+        for (const id of newsIds) {
+          try {
+            const newsResponse = await fetch(`${NEWS_DATA_BASE_URL}${id}Data`);
+            
+            if (!newsResponse.ok) continue;
+            
+            const newsData = await newsResponse.json();
+            
+            // Check if required fields exist
+            if (!newsData.Name || !newsData.Text) continue;
+            
+            // Create news card
+            const newsCard = document.createElement("div");
+            newsCard.className = "news-card";
+            newsCard.onclick = () => window.open(`${NEWS_PAGE_BASE_URL}${id}`, "_blank");
+            
+            newsCard.innerHTML = `
+              ${newsData.Banner ? `<img src="${newsData.Banner}" alt="News Banner" class="news-banner">` : 
+                `<div class="news-banner"></div>`}
+              <div class="news-content">
+                <div class="news-date">${formatDate(newsData.Data)}</div>
+                <h3 class="news-title">${newsData.Name}</h3>
+                <p class="news-excerpt">${truncateText(newsData.Text)}</p>
+              </div>
+            `;
+            
+            newsGrid.appendChild(newsCard);
+          } catch (e) {
+            console.error(`Ошибка загрузки новости ${id}:`, e);
+          }
+        }
+        
+        // Hide loader when done
+        loader.style.display = "none";
+        
+        // If no news were loaded, show message
+        if (newsGrid.children.length === 0) {
+          newsGrid.innerHTML = `
+            <div class="error-message">
+              <p>Новости не найдены</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error("Ошибка загрузки новостей:", error);
+        loader.style.display = "none";
+        newsGrid.innerHTML = `
+          <div class="error-message">
+            <p>${error.message}</p>
+            <button class="retry-btn" onclick="loadNews()">Попробовать снова</button>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize news loading
+    loadNews();
+  </script>
+</body>
+</html>
