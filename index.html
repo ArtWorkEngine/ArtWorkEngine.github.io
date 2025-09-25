@@ -1,128 +1,1003 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArtWork Engine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            primary: '#8B5CF6',
-            secondary: '#22D3EE',
-            dark: '#0F172A',
-            light: '#1E293B'
-          },
-        }
-      }
-    }
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArtWork Engine - Create Games and Apps with Quillfull</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #15151f;
+      --text: #f0f0f0;
+      --text-secondary: #a0a0b0;
+      --accent: #7b61ff;
+      --accent-hover: #8d75ff;
+      --accent-light: rgba(123, 97, 255, 0.1);
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --danger: #F44336;
+      --section-padding: 80px 40px;
+      --gradient: linear-gradient(135deg, var(--accent) 0%, #6a4dff 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
+
+    /* Particles Background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 40px;
+      background-color: rgba(10, 10, 15, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      padding: 15px 40px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .download-btn {
+      padding: 10px 24px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(123, 97, 255, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-text {
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, var(--accent), #a890ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(123, 97, 255, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .floating-card {
+      position: absolute;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-card:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+      width: 200px;
+    }
+
+    .floating-card:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+      width: 180px;
+    }
+
+    .floating-card:nth-child(3) {
+      bottom: 20%;
+      left: 5%;
+      animation-delay: 4s;
+      width: 220px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .code-window {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+    }
+
+    .window-header {
+      background: #1a1a2e;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .control {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .control.close { background: #ff5f57; }
+    .control.minimize { background: #ffbd2e; }
+    .control.maximize { background: #28ca42; }
+
+    .window-title {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-left: 10px;
+    }
+
+    .code-content {
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .code-line {
+      margin-bottom: 5px;
+    }
+
+    .code-keyword {
+      color: #ff79c6;
+    }
+
+    .code-function {
+      color: #50fa7b;
+    }
+
+    .code-string {
+      color: #f1fa8c;
+    }
+
+    .code-comment {
+      color: #6272a4;
+    }
+
+    /* Features Section */
+    .features {
+      padding: var(--section-padding);
+      background: linear-gradient(to bottom, var(--bg) 0%, #0f0f1a 100%);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 60px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--accent-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+    }
+
+    /* Quillfull Section */
+    .quillfull {
+      padding: var(--section-padding);
+      background: var(--bg);
+    }
+
+    .quillfull-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .quillfull-text {
+      padding-right: 40px;
+    }
+
+    .quillfull-text h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .quillfull-text p {
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .quillfull-visual {
+      position: relative;
+    }
+
+    .quillfull-code {
+      background: #1e1e2e;
+      border-radius: 12px;
+      padding: 30px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .code-highlight {
+      background: rgba(123, 97, 255, 0.1);
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      margin: 15px 0;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 100px 40px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+      opacity: 0.3;
+    }
+
+    .cta-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .cta p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 40px 30px;
+      background-color: #080811;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-column h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--accent);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      color: var(--text-secondary);
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #222;
+      color: var(--text-secondary);
+      font-size: 14px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-content, .quillfull-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      
+      .hero-text {
+        text-align: center;
+      }
+      
+      .hero p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .quillfull-text {
+        padding-right: 0;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --section-padding: 60px 20px;
+      }
+
+      header {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .cta h2 {
+        font-size: 32px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    /* Scroll animations */
     .fade-in {
-      animation: fadeIn 1.2s ease-out both;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .hero-bg {
-      background: linear-gradient(120deg, #1E293B 0%, #0F172A 100%);
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
-<body class="bg-dark text-white">
-  <header class="flex justify-between items-center p-6 bg-light shadow-lg sticky top-0 z-50">
-    <h1 class="text-3xl font-extrabold text-primary">ArtWork Engine</h1>
-    <div class="flex gap-4 items-center">
-      <button class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-xl transition shadow-md text-sm">Download</button>
-      <select id="langSwitcher" class="bg-dark text-white px-3 py-2 rounded border border-gray-700">
-        <option value="en">EN</option>
-        <option value="ru">RU</option>
-      </select>
+<body>
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-cube"></i>
+      </div>
+      <span>ArtWork Engine</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#quillfull">Quillfull</a>
+      <a href="#download">Download</a>
+      <a href="#">Documentation</a>
+      <a href="#">Community</a>
+    </nav>
+    <div class="header-actions">
+      <button class="download-btn" onclick="scrollToDownload()">
+        <i class="fas fa-download"></i>
+        Download
+      </button>
     </div>
   </header>
 
-  <section class="hero-bg text-center py-28 px-6 fade-in">
-    <h2 class="text-5xl font-extrabold mb-6 leading-tight">Unleash Your Creativity<br>with <span class="text-primary">ArtWork Engine</span></h2>
-    <p class="text-gray-300 max-w-3xl mx-auto text-lg mb-10">Next-gen development environment with AI support, visual tools, custom scripting and powerful export options — all in one place.</p>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyH5BF3nlenlecGs9NAhLOYm2b3GTMvf42Tw&s" alt="Hero Image" class="rounded-2xl mx-auto shadow-2xl w-full max-w-5xl">
-  </section>
-
-  <section class="py-24 px-6 fade-in">
-    <h3 class="text-4xl font-semibold text-center mb-14">Why Choose ArtWork Engine?</h3>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">User-Friendly Interface</h4>
-        <p class="text-gray-300">Focus on your vision with an elegant, streamlined editor.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">Version 2.0 Released</span>
+        <h1>Create Amazing Games and Apps with ArtWork Engine</h1>
+        <p>Powerful, intuitive game development platform with Quillfull scripting language. Build your dream projects faster and easier than ever before.</p>
+        <div class="hero-actions">
+          <a href="#download" class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            Download Now
+          </a>
+          <a href="#" class="btn btn-secondary">
+            <i class="fas fa-play-circle"></i>
+            Watch Demo
+          </a>
+        </div>
       </div>
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">Addons & Customization</h4>
-        <p class="text-gray-300">Powerful modular system for unlimited expansion.</p>
-      </div>
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">AI Assistant</h4>
-        <p class="text-gray-300">Smart code suggestions, fixes and even generation – instantly.</p>
-      </div>
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">Multi-Format Packaging</h4>
-        <p class="text-gray-300">Build once and export to Web (HTML), Desktop (EXE), or Mobile (APK).</p>
-      </div>
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">Lightning-Fast</h4>
-        <p class="text-gray-300">Optimized core for maximum performance even on low-end hardware.</p>
-      </div>
-      <div class="bg-light rounded-2xl p-8 shadow-md hover:shadow-xl transition border border-gray-700">
-        <h4 class="text-xl font-bold mb-2">ArtLang — Native Language</h4>
-        <p class="text-gray-300">Our own powerful, easy-to-learn scripting language designed for ArtWork Engine.</p>
+      <div class="hero-visual">
+        <div class="floating-card">
+          <h4>Visual Editor</h4>
+          <p>Drag & drop interface</p>
+        </div>
+        <div class="floating-card">
+          <h4>Asset Library</h4>
+          <p>Thousands of resources</p>
+        </div>
+        <div class="floating-card">
+          <h4>One-Click Export</h4>
+          <p>Multiple platforms</p>
+        </div>
+        <div class="code-window">
+          <div class="window-header">
+            <div class="window-controls">
+              <div class="control close"></div>
+              <div class="control minimize"></div>
+              <div class="control maximize"></div>
+            </div>
+            <div class="window-title">game.qf - ArtWork Engine</div>
+          </div>
+          <div class="code-content">
+            <div class="code-line"><span class="code-keyword">game</span> <span class="code-function">MyAdventureGame</span> {</div>
+            <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">scene</span> <span class="code-function">MainMenu</span> {</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">background</span> = <span class="code-string">"menu_bg.png"</span>;</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">button</span> <span class="code-function">StartGame</span> {</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">text</span> = <span class="code-string">"Start Adventure"</span>;</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">onClick</span> = <span class="code-function">loadScene</span>(<span class="code-string">"GameWorld"</span>);</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+            <div class="code-line">&nbsp;&nbsp;}</div>
+            <div class="code-line">}</div>
+            <div class="code-line"><span class="code-comment">// Quillfull makes game development simple</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="py-20 px-6 text-center fade-in">
-    <h3 class="text-4xl font-semibold mb-8">Insert Your Showcase Here</h3>
-    <p class="text-gray-400 mb-10">Preview your game, visual novel, UI or anything built with ArtWork Engine.</p>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyH5BF3nlenlecGs9NAhLOYm2b3GTMvf42Tw&s" alt="Placeholder" class="rounded-xl mx-auto shadow-2xl w-full max-w-5xl">
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="section-header fade-in">
+      <h2 class="section-title">Powerful Features</h2>
+      <p class="section-subtitle">Everything you need to bring your creative vision to life</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3 class="feature-title">Quillfull Language</h3>
+        <p class="feature-description">Our custom scripting language designed specifically for game development. Clean syntax, powerful features, and easy to learn.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-paint-brush"></i>
+        </div>
+        <h3 class="feature-title">Visual Editor</h3>
+        <p class="feature-description">Drag-and-drop interface with real-time preview. Build your scenes visually without writing a single line of code.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h3 class="feature-title">Asset Store</h3>
+        <p class="feature-description">Access thousands of ready-to-use assets, from characters and environments to sound effects and music tracks.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h3 class="feature-title">One-Click Export</h3>
+        <p class="feature-description">Publish your games to multiple platforms with a single click. Windows, Mac, Linux, Web, and mobile support.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3 class="feature-title">Multiplayer Ready</h3>
+        <p class="feature-description">Built-in networking capabilities make it easy to create multiplayer games without complex server setup.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 class="feature-title">Mobile Optimized</h3>
+        <p class="feature-description">Touch controls, mobile UI components, and performance optimizations for creating games for iOS and Android.</p>
+      </div>
+    </div>
   </section>
 
-  <footer class="bg-light text-gray-500 py-8 text-center border-t border-gray-700">
-    <p>&copy; 2025 ArtWork Engine. All rights reserved.</p>
+  <!-- Quillfull Section -->
+  <section class="quillfull" id="quillfull">
+    <div class="quillfull-content">
+      <div class="quillfull-text fade-in">
+        <h2>The Quillfull Language</h2>
+        <p>Quillfull is a custom scripting language designed specifically for ArtWork Engine. With clean, readable syntax and powerful features, it makes game development accessible to both beginners and experienced developers.</p>
+        <p>Focus on your game logic while Quillfull handles the complex underlying systems. From AI behavior to physics simulations, Quillfull has you covered.</p>
+        <a href="#" class="btn btn-primary">
+          <i class="fas fa-book"></i>
+          Learn Quillfull
+        </a>
+      </div>
+      <div class="quillfull-visual fade-in">
+        <div class="quillfull-code">
+          <div class="code-line"><span class="code-keyword">entity</span> <span class="code-function">Player</span> {</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">sprite</span> = <span class="code-string">"player.png"</span>;</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">health</span> = <span class="code-number">100</span>;</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">speed</span> = <span class="code-number">5</span>;</div>
+          <div class="code-line"></div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">function</span> <span class="code-function">onUpdate</span>() {</div>
+          <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (<span class="code-function">keyPressed</span>(<span class="code-string">"space"</span>)) {</div>
+          <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-function">jump</span>();</div>
+          <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+          <div class="code-line">&nbsp;&nbsp;}</div>
+          <div class="code-line">}</div>
+          <div class="code-line"></div>
+          <div class="code-line"><span class="code-keyword">scene</span> <span class="code-function">GameWorld</span> {</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">background</span> = <span class="code-string">"forest.png"</span>;</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">player</span> = <span class="code-function">Player</span>();</div>
+          <div class="code-line">}</div>
+          <div class="code-highlight">
+            <div class="code-line"><span class="code-comment">// Simple, readable code for complex game logic</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta" id="download">
+    <div class="cta-content">
+      <h2 class="fade-in">Ready to Start Creating?</h2>
+      <p class="fade-in">Download ArtWork Engine today and join thousands of developers bringing their ideas to life. Free to try with no limitations.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary fade-in">
+          <i class="fas fa-download"></i>
+          Download for Windows
+        </a>
+        <a href="#" class="btn btn-secondary fade-in">
+          <i class="fas fa-desktop"></i>
+          Other Platforms
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3>ArtWork Engine</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">The ultimate game development platform for creators of all skill levels.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-discord"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Download</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Release Notes</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Tutorials</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2023 ArtWork Engine. All rights reserved. Quillfull is a trademark of ArtWork Engine.
+    </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    const translations = {
-      en: {
-        header: "ArtWork Engine",
-        download: "Download",
-        heroTitle: "Unleash Your Creativity with ArtWork Engine",
-        heroDesc: "Next-gen development environment with AI support, visual tools, custom scripting and powerful export options — all in one place.",
-        featuresTitle: "Why Choose ArtWork Engine?",
+    // Particles.js configuration
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#7b61ff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#7b61ff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
       },
-      ru: {
-        header: "Движок ArtWork",
-        download: "Скачать",
-        heroTitle: "Открой свой креатив с ArtWork Engine",
-        heroDesc: "Современная среда разработки с ИИ-помощником, визуальными инструментами, скриптингом и мощной системой экспорта — всё в одном.",
-        featuresTitle: "Почему ArtWork Engine?",
-      }
-    };
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        }
+      },
+      retina_detect: true
+    });
 
-    document.getElementById('langSwitcher').addEventListener('change', function () {
-      const lang = this.value;
-      document.querySelector('h1').textContent = translations[lang].header;
-      document.querySelector('button').textContent = translations[lang].download;
-      document.querySelector('section.hero-bg h2').innerHTML = translations[lang].heroTitle;
-      document.querySelector('section.hero-bg p').textContent = translations[lang].heroDesc;
-      document.querySelector('section:nth-of-type(2) h3').textContent = translations[lang].featuresTitle;
+    // Header scroll effect
+    window.addEventListener("scroll", function() {
+      const header = document.getElementById("header");
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+
+    // Scroll animations
+    const fadeElements = document.querySelectorAll(".fade-in");
+    
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    fadeElements.forEach(element => {
+      fadeObserver.observe(element);
+    });
+
+    // Scroll to download section
+    function scrollToDownload() {
+      document.getElementById("download").scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    // Floating cards animation
+    const floatingCards = document.querySelectorAll('.floating-card');
+    floatingCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 2}s`;
     });
   </script>
 </body>
